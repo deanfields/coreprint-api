@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'coreprint/api/version'
+require 'coreprint/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "coreprint-api"
-  spec.version       = Coreprint::Api::VERSION
+  spec.name          = "coreprint"
+  spec.version       = Coreprint::VERSION
   spec.authors       = ["Dean Fields"]
   spec.email         = ["dean@deanfields.co.uk"]
   spec.summary       = %q{TODO: Write a short summary. Required.}
