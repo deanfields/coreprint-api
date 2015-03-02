@@ -10,8 +10,9 @@ require "coreprint/dam"
 
 require "httparty"
 require "json"
+require "active_support/all"
 
-module Coreprint
+module CorePrint
   CP_TEST = false
 
   def self.log(string)
