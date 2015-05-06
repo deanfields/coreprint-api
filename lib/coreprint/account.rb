@@ -96,32 +96,70 @@ module CorePrint
       end
     end
 
-    def categories
+    def category_catalogue_items
       cats = []
-
       self.catalogues.each do |ctl|
         q = ApiResource.ensure_array(self.request(:get, account_categories_service, { :catalogueid => ctl }))
         q = [] if q == {}
 
         q.each do |cat|
+         
           cats << cat
         end
+        
       end
-
+      
       return cats
     end
 
-    def category(id)
-      cats = self.categories
-      cats.each do |c|
-        return c if c[:id] == id
+    def categories
+      cats = []
+      self.catalogues.each do |ctl|
+        q = ApiResource.ensure_array(self.request(:get, account_categories_service, { :catalogueid => ctl }))
+        q = [] if q == {}
+
+        q.each do |cat|
+         
+          iterate_categories(cat, cats)
+        end
+        
       end
-
-      puts cats
-      puts id
-
-      return nil
+      
+      return cats
     end
+
+    def iterate_categories(h, kits)
+     t = Hash.new
+      h.each do |k, v|
+        
+        if k["id"]
+          t[:id] = v
+
+        elsif k["name"]
+          t[:name] = v
+
+        elsif k["categories"]
+         
+          v.each do |a, c|
+            iterate_categories(c, kits)
+          end
+
+        end
+        kits << t
+      end
+    end
+
+  def category(id)
+    cats = self.categories
+    cats.each do |c|
+      return c if c[:id] == id
+    end
+
+    puts cats
+    puts id
+
+    return nil
+  end
 
     def change_user_password(email, pass)
       self.request(:put, update_user_service, {}, {
@@ -162,6 +200,16 @@ module CorePrint
       template["content"] = customizations
 
       self.request(:post, "getproof", { :productid => product }, template)
+    end
+
+     def price(product, qty)
+      options = {
+        page: 1,
+        format: "image",
+        width: 400
+      }
+
+      self.request(:get, "getproductprice", { :productid => product, :qty => qty })
     end
 
     private
