@@ -50,7 +50,7 @@ module CorePrint
   end
 
   class Product < ApiResource
-    attr_accessor :json, :name, :code, :description, :printoption, :preview, :thumbnail, :uom, :userupload, :templated, :stock, :outofstock, :favourite, :created, :modified, :availableqtys, :minqty, :maxqty, :defaultprice
+    attr_accessor :json, :name, :code, :description, :printoption, :preview, :thumbnail, :uom, :userupload, :templated, :stock, :outofstock, :favourite, :created, :modified, :availableqtys, :minqty, :maxqty, :defaultprice, :defaultvalue
 
     def load
       begin
@@ -64,6 +64,28 @@ module CorePrint
 
     def prices
       ApiResource.ensure_array @account.request(:get, product_prices_service, { :productid => self.id })
+    end
+
+     def price(qty)
+      ApiResource.ensure_array @account.request(:get, product_price_service, { :productid => self.id, :qty => qty })
+    end
+
+    def pages
+      data = ApiResource.ensure_array @account.request(:get, product_properties_service, { :productid => self.id })
+      parsed = []
+
+      data[0].each do |page, value|
+        if page.is_a?(String) && page.include?("page")
+
+          page = {
+            page_number: value["pagenumber"],
+            name: "Page #{value['pagenumber']}",
+            description: "test"
+          }
+          parsed << page
+        end
+      end
+      return parsed
     end
 
     def properties
@@ -85,6 +107,7 @@ module CorePrint
                 order: comp["childorder"],
                 icid: comp["icid"],
                 required: comp["required"],
+                default_value: comp["defaultvalue"],
                 page: pageno.to_i
               }
 
@@ -93,11 +116,14 @@ module CorePrint
                 self.list_entries(component[:content_id]).each do |opt|
                   component[:options][opt[:label]] = opt[:value]
                 end
+
               elsif component[:content_type] == "ADDRESS"
                 component[:options] = {}
+                
                 self.addresses(component[:content_id]).each do |opt|
                   component[:options][opt[:label]] = opt[:value]
                 end
+
               end
 
               parsed << component
@@ -162,6 +188,10 @@ module CorePrint
     end
 
     private
+
+    def product_price_service
+      "getproductprice"
+    end
 
     def product_reload_service
       "getproduct"

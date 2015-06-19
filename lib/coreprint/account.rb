@@ -138,6 +138,9 @@ module CorePrint
         elsif k["name"]
           t[:name] = v
 
+        elsif k["preview"]
+          t[:preview] = v
+
         elsif k["categories"]
          
           v.each do |a, c|
