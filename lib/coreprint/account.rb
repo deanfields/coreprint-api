@@ -226,7 +226,7 @@ module CorePrint
     end
 
     def account_categories_service
-      "findallcategories"
+      "findcategories"
     end
 
     def account_details_service
