@@ -153,15 +153,17 @@ module CorePrint
     end
 
   def category(id)
-    cats = self.categories
-    cats.each do |c|
-      return c if c[:id] == id
-    end
+    c = []
 
-    puts cats
-    puts id
+     q = ApiResource.ensure_array(self.request(:get, account_category_service, { :categoryid => id }))
+      q = [] if q == {}
 
-    return nil
+      q.each do |cat|
+       
+        iterate_categories(cat, c)
+      end
+
+    return c
   end
 
     def change_user_password(email, pass)
@@ -226,7 +228,11 @@ module CorePrint
     end
 
     def account_categories_service
-      "findcategories"
+      "findallcategories"
+    end
+
+    def account_category_service
+      "findcategory"
     end
 
     def account_details_service
