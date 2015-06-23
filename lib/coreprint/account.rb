@@ -46,7 +46,7 @@ module CorePrint
         request = self.request(:get, account_user_exists, { username: @credentials[:username] })
       end
 
-      request["result"] == true
+      request["result"]
     end
 
     def valid?
@@ -154,12 +154,9 @@ module CorePrint
 
   def category(id)
     c = []
-
      q = ApiResource.ensure_array(self.request(:get, account_category_service, { :categoryid => id }))
       q = [] if q == {}
-
       q.each do |cat|
-       
         iterate_categories(cat, c)
       end
 
