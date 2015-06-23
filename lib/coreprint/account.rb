@@ -46,8 +46,7 @@ module CorePrint
         request = self.request(:get, account_user_exists, { username: @credentials[:username] })
       end
 
-      request
-     
+      request["result"] == true
     end
 
     def valid?
