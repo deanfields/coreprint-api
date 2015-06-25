@@ -59,6 +59,12 @@ module CorePrint
       }})
     end
 
+    def transfer(item)
+      @account.request(:put, basket_transfer_service, {}, { "0" => {
+        id: item[:id]
+      }})
+    end
+
     def add_dam(item)
       @account.request(:put, basket_add_service, {}, { "0" => {
         productid: item[:id],
@@ -121,6 +127,10 @@ module CorePrint
 
     def basket_add_service
       "addbasketentry"
+    end
+
+    def basket_transfer_service
+      "transferbasketentry"
     end
   end
 end

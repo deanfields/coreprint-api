@@ -70,7 +70,7 @@ module CorePrint
 
     def create_user(user)
       self.request(:put, account_create_service, {}, {
-        :name => (user[:username] || user[:email]),
+        :name => user[:email],
         :email => user[:email],
         :fullname => user[:name],
         :password => user[:password]
