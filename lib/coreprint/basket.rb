@@ -60,7 +60,7 @@ module CorePrint
     end
 
     def transfer(item)
-      @account.request(:put, basket_transfer_service, {}, { "0" => {
+      @account.request(:post, basket_transfer_service, {}, { "0" => {
         id: item[:id]
       }})
     end
