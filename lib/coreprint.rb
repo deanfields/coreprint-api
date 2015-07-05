@@ -71,7 +71,7 @@ module CorePrint
         CorePrint.log "CorePrint (#{service}) [PUT]: #{payload.to_json}"
         response = HTTParty.put(url, options)
       when :stream
-        CorePrint.log "CorePrint (#{service}) [STREAM]: #{query.to_query} #{payload.size}"
+        CorePrint.log "CorePrint (#{service}) [STREAM]: #{query.to_query}"
         response = HTTParty.post(url, options)
       else
         CorePrint.log "CorePrint (#{service}) method #{method} not found"
