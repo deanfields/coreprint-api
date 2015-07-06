@@ -11,6 +11,7 @@ require "coreprint/dam"
 require "httparty"
 require "json"
 require "active_support/all"
+require 'open-uri'
 
 module CorePrint
   CP_TEST = false
@@ -51,7 +52,7 @@ module CorePrint
       options[:body] = payload.to_json
       options[:headers] = { 'Content-Type' => 'text/html' }
     else
-      options[:body_stream] = payload
+      options[:body_stream] = open(payload)
       options[:headers] = { 'Transfer-Encoding' => 'chunked', 'Content-Type' => 'text/html' }
     end
 
