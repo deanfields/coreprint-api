@@ -13,10 +13,9 @@ module CorePrint
       request = address.save
 
       if request[:action] == "Added"
-        address.id = request[:id]
-        return address
+        request[:id]
       else
-        raise "Unknown error adding address"
+        return false
       end
     end
 
@@ -28,7 +27,7 @@ module CorePrint
   end
 
   class Address < ApiResource
-    attr_accessor :id, :label, :type, :deliverto, :city, :address1, :address2, :state, :country, :postcode
+    attr_accessor :label, :type, :deliverto, :city, :address1, :address2, :state, :country, :postcode
 
     def streets=(hash)
       address1 = hash["0"]
