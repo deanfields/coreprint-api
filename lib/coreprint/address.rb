@@ -28,7 +28,7 @@ module CorePrint
   end
 
   class Address < ApiResource
-    attr_accessor :label, :type, :deliverto, :city, :address1, :address2, :state, :country, :postcode
+    attr_accessor :id, :label, :type, :deliverto, :city, :address1, :address2, :state, :country, :postcode
 
     def streets=(hash)
       address1 = hash["0"]
