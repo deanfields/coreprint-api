@@ -12,7 +12,7 @@ module CorePrint
       address = CorePrint::Address.new(@account, params)
       request = address.save
 
-      if request[:action] == "Added"
+      if request[:action] == "Added" ||  request[:action] == "Updated"
         request[:id]
       else
         return false
