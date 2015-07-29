@@ -114,13 +114,16 @@ module CorePrint
 
     def categories
       cats = []
+
       self.catalogues.each do |ctl|
+
         q = ApiResource.ensure_array(self.request(:get, account_categories_service, { :catalogueid => ctl }))
         q = [] if q == {}
 
         q.each do |cat|
-         
+          # puts "top cat: #{cat}"
           iterate_categories(cat, cats)
+
         end
         
       end
@@ -129,34 +132,45 @@ module CorePrint
     end
 
     def iterate_categories(h, kits)
-     t = Hash.new
-      h.each do |k, v|
-        
-        if k["id"]
-          t[:id] = v
+    
+    # new hash everytime method is called
+    t = Hash.new
 
-        elsif k["name"]
-          t[:name] = v
-
-        elsif k["preview"]
-          t[:preview] = v
-
-        elsif k["parent"]
-          t[:parent] = v
-
-        elsif k["categories"]
-          
-          v.each do |a, c|
-
-            c["parent"] = t[:id]
-
-            iterate_categories(c, kits)
-          end
-
+    # Iterate over passed in category as key and value
+    h.each do |k, v|
+      # If it finds "id" key
+      if k["id"]
+        # put it as a symbol in new hash
+        t[:id] = v
+      # If it finds "name" key  
+      elsif k["name"]
+        # Put it as a symbol in new hash
+        t[:name] = v
+      # if it finds "preview" key
+      elsif k["preview"]
+        # put it as a symbol in new hash
+        t[:preview] = v
+      # If it finds "parent" key
+      elsif k["parent"]
+        # add parent symbol
+        t[:parent] = v
+      # if it finds "categories" key
+      elsif k["categories"]
+     
+        # Iterate over the categories ( a = key [0 etc], c = value [hash])
+        v.each do |a, c|
+          # Add parent hash key set to the 
+          c["parent"] = t[:id]
+         
+          # run this method again, passing in the hashed category + the array
+          iterate_categories(c, kits)
         end
-        kits << t
       end
+      
     end
+     puts "adding  item: #{t}"
+        kits << t
+  end
 
   def category(id)
     c = []
