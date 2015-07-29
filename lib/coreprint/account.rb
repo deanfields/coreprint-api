@@ -141,9 +141,16 @@ module CorePrint
         elsif k["preview"]
           t[:preview] = v
 
+        elsif k["parent"]
+
+
         elsif k["categories"]
-         
+
+          
           v.each do |a, c|
+
+            c["parent"] = k["id"]
+
             iterate_categories(c, kits)
           end
 
