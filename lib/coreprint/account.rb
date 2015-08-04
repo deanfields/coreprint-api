@@ -176,11 +176,14 @@ module CorePrint
     c = []
      q = ApiResource.ensure_array(self.request(:get, account_category_service, { :categoryid => id }))
       q = [] if q == {}
+      unless q == []
       q.each do |cat|
         iterate_categories(cat, c)
       end
 
-    return c
+      return c
+    end
+    return nil
   end
 
     def change_user_password(email, pass)
