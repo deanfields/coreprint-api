@@ -176,7 +176,7 @@ module CorePrint
     c = []
      q = ApiResource.ensure_array(self.request(:get, account_category_service, { :categoryid => id }))
       q = [] if q == {}
-      unless q == []
+      unless q.is_a?(String)
       q.each do |cat|
         iterate_categories(cat, c)
       end
